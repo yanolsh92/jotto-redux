@@ -4,14 +4,15 @@ export const actionTypes = {
   CORRECT_GUESS: 'CORRECT_GUESS',
   GUESS_WORD: 'GUESS_WORD',
   SET_SECRET_WORD: 'SET_SECRET_WORD',
+  RESET_GAME: 'RESET_GAME',
 };
 
 /**
- * Returns Redux Thunk functio that dispatches GUESS_WORD action
- * and (conditionally) CORRECT_GUESS action
+ * Returns Redux Thunk function that dispatches GUESS_WORD action
+ *     and (conditionally) CORRECT_GUESS action
  * @function guessWord
  * @param {string} guessedWord - Guessed word.
- * @returns {function} - Redux Thunk function
+ * @returns {function} - Redux Thunk function.
  */
 export const guessWord = (guessedWord) => {
   return function (dispatch, getState) {
@@ -22,16 +23,46 @@ export const guessWord = (guessedWord) => {
       type: actionTypes.GUESS_WORD,
       payload: { guessedWord, letterMatchCount },
     });
+
     if (guessedWord === secretWord) {
       dispatch({ type: actionTypes.CORRECT_GUESS });
     }
   };
 };
-
-export const getSecretWord = () => {
-  return (dispatch) => {
-    return axios.get('http://localhost:3030').then((response) => {
-      dispatch({ type: actionTypes.SET_SECRET_WORD, payload: response.data });
+/**
+ * Dispatch axios action to get secret word from random word server.
+ * Separate this out so it can be used in getSecretWord and resetGame.
+ * @function getSecretWordDispatch
+ * @param {dispatch} dispatch - Redux Thunk dispatch.
+ *
+ */
+const getSecretWordDispatch = (dispatch) => {
+  return axios.get('http://localhost:3030').then((response) => {
+    dispatch({
+      type: actionTypes.SET_SECRET_WORD,
+      payload: response.data,
     });
+  });
+};
+
+/**
+ * Returns Redux Thunk function that dispatches GET_SECRET_WORD action
+ *     after axios promise resolves
+ * @function getSecretWord
+ * @returns {function} - Redux Thunk function.
+ */
+export const getSecretWord = () => {
+  return getSecretWordDispatch;
+};
+
+/**
+ * Action creator to reset game and get a new secret word.
+ * @function resetGame
+ * @returns {function} - Redux Thunk function that dispatches RESET_GAME action and calls getSecretWord().
+ */
+export const resetGame = () => {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.RESET_GAME });
+    return getSecretWordDispatch(dispatch);
   };
 };

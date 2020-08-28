@@ -12,3 +12,8 @@ test('returns state of true upon recieving an action of type `CORRECT_GUESS`', (
   });
   expect(newState).toBe(true);
 });
+test('returns state of false upon receiving an action of type `RESET_GAME`', () => {
+  // start with success true, since success is false by default
+  const newState = successReducer(true, { type: actionTypes.RESET_GAME });
+  expect(newState).toBe(false);
+});
