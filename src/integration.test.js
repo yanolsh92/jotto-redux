@@ -4,7 +4,6 @@ import { guessWord } from './actions';
 describe('guessWord action dispatcher', () => {
   const secretWord = 'party';
   const unsuccessfulGuess = 'train';
-
   describe('no guessed words', () => {
     let store;
     const initialState = { secretWord };
@@ -19,12 +18,11 @@ describe('guessWord action dispatcher', () => {
         success: false,
         guessedWords: [
           {
-            guessWord: unsuccessfulGuess,
+            guessedWord: unsuccessfulGuess,
             letterMatchCount: 3,
           },
         ],
       };
-
       expect(newState).toEqual(expectedState);
     });
     test('updates state correctly for successful guess', () => {
@@ -43,7 +41,6 @@ describe('guessWord action dispatcher', () => {
       expect(newState).toEqual(expectedState);
     });
   });
-
   describe('some guessed words', () => {
     const guessedWords = [{ guessedWord: 'agile', letterMatchCount: 1 }];
     const initialState = { guessedWords, secretWord };
