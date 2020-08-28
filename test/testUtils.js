@@ -1,4 +1,4 @@
-// import checkPropTypes from 'check-prop-types';
+import checkPropTypes from 'check-prop-types';
 
 /**
  * Return node(s) with the given data-test attribute.
@@ -15,12 +15,12 @@ export const findByTestAttr = (wrapper, val) => {
  * @param {React.Component} component - Component to check props against.
  * @param {object} conformingProps - Props we expect to conform to defined propTypes.
  */
-// export const checkProps = (component, conformingProps) => {
-//   const propError = checkPropTypes(
-//     component.propTypes,
-//     conformingProps,
-//     'prop',
-//     component.name
-//   );
-//   expect(propError).toBeUndefined();
-// };
+export const checkProps = (component, conformingProps) => {
+  const propError = checkPropTypes(
+    component.propTypes,
+    conformingProps,
+    'prop',
+    component.name
+  );
+  expect(propError).toBeUndefined();
+};
