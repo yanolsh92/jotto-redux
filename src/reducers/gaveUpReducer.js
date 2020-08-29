@@ -1,14 +1,14 @@
 import { actionTypes } from '../actions';
 
 /**
- * @function successReducer
- * @param {boolean} state - Whether the user has guessed correctly.
+ * @function gaveUp
+ * @param {boolean} state - Whether the user has given up.
  * @param {object} action - Action to be reduced.
- * @returns {boolean} - New success state.
+ * @returns {boolean} - aveUp state.
  */
 export default (state = false, action) => {
   switch (action.type) {
-    case actionTypes.CORRECT_GUESS:
+    case actionTypes.GIVE_UP:
       return true;
     case actionTypes.RESET_GAME:
       return false;

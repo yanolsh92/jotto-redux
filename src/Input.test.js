@@ -4,6 +4,12 @@ import { shallow } from 'enzyme';
 import { findByTestAttr, storeFactory } from '../test/testUtils';
 import Input, { UnconnectedInput } from './Input';
 
+/**
+ * Factory function to create a ShallowWrapper for the Input component.
+ * @function setup
+ * @param {object} initialState - Initial state for this setup.
+ * @returns {ShallowWrapper}
+ */
 const setup = (initialState = {}) => {
   const store = storeFactory(initialState);
   const wrapper = shallow(<Input store={store} />)
@@ -11,7 +17,6 @@ const setup = (initialState = {}) => {
     .dive();
   return wrapper;
 };
-setup();
 
 describe('render', () => {
   describe('word has not been guessed', () => {
@@ -32,6 +37,10 @@ describe('render', () => {
       const submitButton = findByTestAttr(wrapper, 'submit-button');
       expect(submitButton.length).toBe(1);
     });
+    test('renders "give up" button', () => {
+      const submitButton = findByTestAttr(wrapper, 'give-up-button');
+      expect(submitButton.length).toBe(1);
+    });
   });
   describe('word has been guessed', () => {
     let wrapper;
@@ -43,13 +52,13 @@ describe('render', () => {
       const component = findByTestAttr(wrapper, 'component-input');
       expect(component.length).toBe(1);
     });
-    test('does not renders input box', () => {
+    test('does not render input box', () => {
       const inputBox = findByTestAttr(wrapper, 'input-box');
       expect(inputBox.length).toBe(0);
     });
-    test('does not renders submit button', () => {
-      const submitButton = findByTestAttr(wrapper, 'submit-button');
-      expect(submitButton.length).toBe(0);
+    test('does not render submit button', () => {
+      const submit = findByTestAttr(wrapper, 'submit-button');
+      expect(submit.length).toBe(0);
     });
   });
 });
@@ -68,24 +77,40 @@ describe('redux props', () => {
   });
 });
 
-describe('`guessWord` action creator call', () => {
+test('calls `giveUp` prop upon "Give Up" button click', () => {
+  // create a mock function so we can see whether it's called on click
+  const giveUpMock = jest.fn();
+
+  // set up Input, with giveUpMock as a prop
+  const wrapper = shallow(<UnconnectedInput giveUp={giveUpMock} />);
+
+  // simulate click on giveUp button
+  const giveUpButton = findByTestAttr(wrapper, 'give-up-button');
+  giveUpButton.simulate('click', { preventDefault() {} });
+
+  // expect the mock to have been called once
+  expect(giveUpMock.mock.calls.length).toBe(1);
+});
+
+describe('`guessWord` action creator', () => {
   let guessWordMock;
   let wrapper;
   const guessedWord = 'train';
   beforeEach(() => {
-    //set up mock for 'guessWord
+    // create a mock function for `guessWord`
     guessWordMock = jest.fn();
-    const props = {
-      guessWord: guessWordMock,
-    };
-    wrapper = shallow(<UnconnectedInput {...props} />);
 
-    //add value to input box
-    wrapper.setState({ currentGuess: guessedWord });
-    const submitButton = findByTestAttr(wrapper, 'submit-button');
-    submitButton.simulate('click', { preventDefault() {} });
+    // set up Input, with guessWordMock as a prop
+    wrapper = shallow(<UnconnectedInput guessWord={guessWordMock} />);
+
+    // simulate the input
+    wrapper.instance().inputBox.current = { value: guessedWord };
+
+    // simulate click on submit button
+    const submit = findByTestAttr(wrapper, 'submit-button');
+    submit.simulate('click', { preventDefault() {} });
   });
-  test('calls `guessWord` when button is clicked', () => {
+  test('`guessWord` was called once', () => {
     const guessWordCallCount = guessWordMock.mock.calls.length;
     expect(guessWordCallCount).toBe(1);
   });
@@ -94,6 +119,6 @@ describe('`guessWord` action creator call', () => {
     expect(guessedWordArg).toBe(guessedWord);
   });
   test('input box clears on submit', () => {
-    expect(wrapper.state('currentGuess')).toBe('');
+    expect(wrapper.instance().inputBox.current.value).toBe('');
   });
 });
