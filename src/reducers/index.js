@@ -4,6 +4,9 @@ import guessedWords from './guessedWordsReducer';
 import secretWord from './secretWordReducer';
 import gaveUp from './gaveUpReducer';
 import userEnter from './userEnterReducer';
+// Challenge #5: Server Error
+import serverError from './serverErrorReducer';
+// END: Challenge #5: Server Error
 
 export default combineReducers({
   success,
@@ -11,4 +14,5 @@ export default combineReducers({
   secretWord,
   gaveUp,
   userEnter,
+  serverError,
 });

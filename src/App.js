@@ -19,6 +19,10 @@ import EnterWordButton from './EnterWordButton';
 import EnterWordForm from './EnterWordForm';
 // END: Challenge #4: Enter Secret Word
 
+// Challenge #2: Reset Game
+import ServerError from './ServerError';
+// END: Challenge #2: Reset Game
+
 import GuessedWords from './GuessedWords';
 import Congrats from './Congrats';
 import Input from './Input';
@@ -45,7 +49,11 @@ export class UnconnectedApp extends Component {
   render() {
     // Challenge #4: Enter Secret Word
     let contents;
-    if (this.props.userEnter === 'inProgress') {
+    // Challenge #5: Server Error
+    if (this.props.serverError) {
+      contents = <ServerError />;
+      // END: Challenge #5: Server Error
+    } else if (this.props.userEnter === 'inProgress') {
       contents = <EnterWordForm formAction={this.props.setUserSecretWord} />;
     } else {
       contents = (
@@ -99,8 +107,9 @@ const mapStateToProps = ({
   secretWord,
   gaveUp,
   userEnter,
+  serverError,
 }) => {
-  return { success, guessedWords, secretWord, gaveUp, userEnter };
+  return { success, guessedWords, secretWord, gaveUp, userEnter, serverError };
 };
 // END: Challenge #4: Enter Secret Word
 

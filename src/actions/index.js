@@ -10,6 +10,7 @@ export const actionTypes = {
   GIVE_UP: 'GIVE_UP',
   USER_ENTERING: 'USER_ENTERING',
   USER_ENTERED: 'USER_ENTERED',
+  SERVER_ERROR: 'SERVER_ERROR',
 };
 
 /**
@@ -44,12 +45,22 @@ export const guessWord = (guessedWord) => {
  *
  */
 const getSecretWordDispatch = (dispatch) => {
-  return axios.get('http://localhost:3030').then((response) => {
-    dispatch({
-      type: actionTypes.SET_SECRET_WORD,
-      payload: response.data,
-    });
-  });
+  return (
+    axios
+      .get('http://localhost:3030')
+      .then((response) => {
+        dispatch({
+          type: actionTypes.SET_SECRET_WORD,
+          payload: response.data,
+        });
+      })
+      // Challenge #5: Server Error
+      // note: axios rejects promise if status is 4xx or 5xx
+      .catch((error) => {
+        dispatch({ type: actionTypes.SERVER_ERROR });
+      })
+  );
+  // END: Challenge #5: Server Error
 };
 
 /**

@@ -23,10 +23,11 @@ describe('guessWord action dispatcher', () => {
       const expectedState = {
         ...initialState,
         success: false,
-        // Challenge #3 and 4
+        // Challenge #3, 4 and 5
         gaveUp: false,
         userEnter: null,
-        // END: Challenge #3 and 4
+        serverError: false,
+        // END: Challenge #3, 4 and 5
         guessedWords: [
           {
             guessedWord: unsuccessfulGuess,
@@ -42,10 +43,11 @@ describe('guessWord action dispatcher', () => {
       const expectedState = {
         secretWord,
         success: true,
-        // Challenge #3 and 4
+        // Challenge #3, 4 and 5
         gaveUp: false,
         userEnter: null,
-        // END: Challenge #3 and 4
+        serverError: false,
+        // END: Challenge #3, 4 and 5
         guessedWords: [
           {
             guessedWord: secretWord,
@@ -69,10 +71,11 @@ describe('guessWord action dispatcher', () => {
       const expectedState = {
         secretWord,
         success: false,
-        // Challenge #3 and 4
+        // Challenge #3, 4 and 5
         gaveUp: false,
         userEnter: null,
-        // END: Challenge #3 and 4
+        serverError: false,
+        // END: Challenge #3, 4 and 5
         guessedWords: [
           ...guessedWords,
           { guessedWord: unsuccessfulGuess, letterMatchCount: 3 },
@@ -86,10 +89,11 @@ describe('guessWord action dispatcher', () => {
       const expectedState = {
         secretWord,
         success: true,
-        // Challenge #3 and 4
+        // Challenge #3, 4 and 5
         gaveUp: false,
         userEnter: null,
-        // END: Challenge #3 and 4
+        serverError: false,
+        // END: Challenge #3, 4 and 5
         guessedWords: [
           ...guessedWords,
           { guessedWord: secretWord, letterMatchCount: 5 },
