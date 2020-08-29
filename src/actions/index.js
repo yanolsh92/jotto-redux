@@ -1,11 +1,15 @@
 import axios from 'axios';
+
 import { getLetterMatchCount } from '../helpers';
+
 export const actionTypes = {
   CORRECT_GUESS: 'CORRECT_GUESS',
   GUESS_WORD: 'GUESS_WORD',
   SET_SECRET_WORD: 'SET_SECRET_WORD',
   RESET_GAME: 'RESET_GAME',
   GIVE_UP: 'GIVE_UP',
+  USER_ENTERING: 'USER_ENTERING',
+  USER_ENTERED: 'USER_ENTERED',
 };
 
 /**
@@ -30,6 +34,8 @@ export const guessWord = (guessedWord) => {
     }
   };
 };
+
+// Challenge #2: Reset Game
 /**
  * Dispatch axios action to get secret word from random word server.
  * Separate this out so it can be used in getSecretWord and resetGame.
@@ -67,8 +73,10 @@ export const resetGame = () => {
     return getSecretWordDispatch(dispatch);
   };
 };
+// END: Challenge #2: Reset Game
 
-/*
+// Challenge #3: Give Up Button
+/**
  * Simple action creator that returns GIVE_UP action type.
  * @function giveUp
  * @returns {object} - GIVE_UP action type.
@@ -76,3 +84,27 @@ export const resetGame = () => {
 export const giveUp = () => {
   return { type: actionTypes.GIVE_UP };
 };
+// END: Challenge #3: Give Up Button
+
+// Challenge #4: Enter Secret Word
+/**
+ * Action creator to dispatch USER_ENTERED and SET_SECRET_WORD actions.
+ * @function setUserSecretWord
+ * @param {string} userSecretWord - Secret word entered by user.
+ * @returns {function} - Redux Thunk function.
+ */
+export const setUserSecretWord = (userSecretWord) => {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.SET_SECRET_WORD, payload: userSecretWord });
+    dispatch({ type: actionTypes.USER_ENTERED });
+  };
+};
+
+/**
+ * Action creator that returns USER_ENTERING action type.
+ * @function setUserEntering
+ * @returns {object} - Action with type USER_ENTERING.
+ */
+export const setUserEntering = () => ({ type: actionTypes.USER_ENTERING });
+
+// END: Challenge #4: Enter Secret Word
